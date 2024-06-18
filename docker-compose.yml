@@ -6,7 +6,7 @@ services:
     environment:
       - node.name=elasticsearch
       - discovery.type=single-node
-      - xpack.security.enabled=true
+      - xpack.security.enabled=false
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_PASSWORD=usertest0
@@ -16,10 +16,9 @@ services:
         hard: -1
     volumes:
       - esdata:/usr/share/elasticsearch/data
-      - ./elk-config/elasticsearch_conf/elasticsearch.yaml:/usr/share/elasticsearch/config/elasticsearch.yaml
+      - ./elk-config/elasticsearch_conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200:9200"
-      - "9300:9300"
     networks:
       - elk
 
@@ -43,13 +42,14 @@ services:
       - ELASTICSEARCH_USERNAME=user_test_0
       - ELASTICSEARCH_PASSWORD=usertest0
     volumes:
-      - ./elk-config/kibana_conf/kibana.yaml:/usr/share/kibana/config/kibana.yaml
+      - ./elk-config/kibana_conf/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - "5601:5601"
     depends_on:
       - elasticsearch
     networks:
       - elk
+
 networks:
   elk:
     driver: bridge

@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.14.1
+    container_name: filebeat
+    user: root
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./elk-config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /Users/vizucode/var/log/logapps:/home/user/var/log/logapps
+    networks:
+      - elk
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
     container_name: elasticsearch
@@ -56,4 +69,6 @@ networks:
 
 volumes:
   esdata:
+    driver: local
+  nginx_vol:
     driver: local
